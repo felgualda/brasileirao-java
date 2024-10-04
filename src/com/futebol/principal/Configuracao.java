@@ -4,7 +4,7 @@ public class Configuracao {
 	
 	public static ListaEquipes listaEquipes = new ListaEquipes();
 
-	public static int duracaoPartida = 7; // APENAS NÚMEROS ÍMPARES (mediana será intervalo)
+	public static int duracaoPartida = 11; // APENAS NÚMEROS ÍMPARES (mediana será intervalo)
 	
 	public static double mediaGolsPartida = 2.2;
 	

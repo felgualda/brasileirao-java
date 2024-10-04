@@ -14,7 +14,13 @@ public class JogoCampeonato {
 		v = visitante;
 	}
 	
-	public JogoCampeonato inverteMando() {
+	public void inverteMando() {
+		Time t = c;
+		c = v;
+		v = t;
+	}
+	
+	public JogoCampeonato getMandoInvertido() {
 		JogoCampeonato jogoInvertido = new JogoCampeonato(v, c);
 		return jogoInvertido;
 	}

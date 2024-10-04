@@ -47,7 +47,7 @@ public class Brasileirao {
         });
     }
     
-    private boolean PartidaRegistrada(List<JogoCampeonato> lista, Time a, Time b) {
+    private boolean partidaRegistrada(List<JogoCampeonato> lista, Time a, Time b) {
     	for(int i = 0; i < lista.size(); i++) {
     		if(lista.get(i).getTimes()[0].compareTime(a) && lista.get(i).getTimes()[1].compareTime(b)) {
     			return true;
@@ -59,9 +59,68 @@ public class Brasileirao {
     	return false;
     }
     
+    private boolean timeJogaNaRodada(int rodada, Time a) {
+    	for(int i = 0; i < 10; i++) {
+    		if(this.partidas[rodada][i] != null) {
+    			Time[] times = this.partidas[rodada][i].getTimes();
+    			if(times[0].compareTime(a) || times[1].compareTime(a)) {
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
+    
+    private boolean timesJogamNaRodada(int rodada, JogoCampeonato partida) {
+    	if(timeJogaNaRodada(rodada, partida.getTimes()[0]) || timeJogaNaRodada(rodada, partida.getTimes()[1])) {
+    		return true;
+    	}
+    	return false;
+    }
+    
     private void gerarPartidas() {
-    	List<JogoCampeonato> jogosRegistrados = new ArrayList<JogoCampeonato>();
+    	List<Time> times = new ArrayList<Time>();
     	
+    	//Coloca times na lista para sorteio
+    	for(int i = 0; i<20; i++) {
+    		times.add(tabela[i].getTime());
+    	}
+    	
+    	
+    	List<Time>[] pote = new ArrayList[4];
+    	
+        for (int i = 0; i < pote.length; i++) {
+            pote[i] = new ArrayList<Time>();	//Inicializa cada lista
+        }
+    	
+    	for(int i = times.size() - 1; i >= 0; i--) {
+    		int indexEscolhido = randomNumbers.nextInt(times.size());
+    		//System.out.println("index: " + i + "index/4 - 1: " + ((i/5)));
+    		pote[(i/5)].add(times.get(indexEscolhido));
+    		times.remove(indexEscolhido);
+    	}
+    	
+    	//System.out.println("times no pote: " + (pote[0].size() + pote[1].size() + pote[2].size() + pote[3].size()));
+    	
+    	for(int rodada = 0; rodada < 19; rodada++) {
+    		for(int partida = 0; partida < 10; partida++) {
+    			int indexPoteC = (partida%8)/2 + (partida/9)*2;
+    			int indexPoteV = (partida%8)/2 + (partida/9)*2 + (partida/8);
+    			
+    			int indexListA = ((partida%2)*2 + (partida/8)*4 - (partida/9)*2) * ((rodada*2)%5);
+    			int indexListB = (partida%2)*2 + 1 + (partida/8)*3 - (partida/9)*2;
+    			
+    			Time casa = pote[indexPoteC].get(indexListA);
+    			Time visitante = pote[indexPoteV].get(indexListB);
+    			partidas[rodada][partida] = new JogoCampeonato(casa,visitante);
+    		}
+    	}
+    	
+    	
+    	//NOVO ALGORITMO
+    	
+    	
+    	/*
     	for(int rodada = 0; rodada < 19; rodada++) {
     		
     		boolean rodadaValida = true;
@@ -109,11 +168,13 @@ public class Brasileirao {
         	} else {
         		rodada--;
         	}
-    	}
+    	}*/
+    	
+
     	
     	for(int rodada = 19; rodada < 38; rodada++) {
     		for(int partida = 0; partida < 10; partida++) {
-    			partidas[rodada][partida] = partidas[rodada-19][partida].inverteMando();
+    			partidas[rodada][partida] = partidas[rodada-19][partida].getMandoInvertido();
     		}
     	}
     				
@@ -149,7 +210,7 @@ public class Brasileirao {
     	}
     	
     	MatchMaker game = new MatchMaker();
-    	game.setApenasResultado(true);
+    	game.setApenasResultado(false);
     	for(int i = 0; i < 10; i++) {
     		Time casa = partidas[rodadaAtual][i].getTimes()[0];
     		Time visitante = partidas[rodadaAtual][i].getTimes()[1];

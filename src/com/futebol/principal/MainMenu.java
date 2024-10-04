@@ -24,7 +24,9 @@ public class MainMenu {
 		
 		Brasileirao brasileirao = new Brasileirao();
 		
-		System.out.println("RODADA 0");
+		brasileirao.exibirPartidas();
+		
+		/*System.out.println("RODADA 0");
 		System.out.println();
 		brasileirao.ordenarTabela();
 		brasileirao.exibirTabela();
@@ -34,16 +36,16 @@ public class MainMenu {
 		input.nextLine();
 		
 		while(true) {
-			System.out.println("RODADA " + brasileirao.getRodada());
-			System.out.println();
 			brasileirao.simularRodada();
 			brasileirao.ordenarTabela();
+			System.out.println("RODADA " + brasileirao.getRodada());
+			System.out.println();
 			brasileirao.exibirTabela();
 			System.out.println();
 			System.out.println("Pressione ENTER para prosseguir...");
 			
 			input.nextLine();
-		}
+		}*/
 
 	}
 	
